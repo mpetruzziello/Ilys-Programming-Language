@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+
+enum class TokenType {
+    E0F_TOKEN,
+
+    OPENBRACKET_TOKEN,
+    CLOSEBRACKET_TOKEN,
+
+    OPENCURLYBRACKET_TOKEN,
+    CLOSECURLYBRACKET_TOKEN,
+
+    OPENPARENTHESIS_TOKEN,
+    CLOSEPARENTHESIS_TOKEN,
+
+    NUMBER_TOKEN,
+    STRING_TOKEN,
+
+    IDENTIFIER_TOKEN,
+
+    ASSIGNMENT_TOKEN, // =
+    EQUALS_TOKEN, // ==
+    NOT_TOKEN, // ! (8:35)
+
+}
