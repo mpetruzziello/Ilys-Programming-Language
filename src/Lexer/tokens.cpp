@@ -4,14 +4,14 @@
 enum class TokenType {
     E0F_TOKEN,
 
-    OPENBRACKET
-    CLOSEBRACKET
+    OPENBRACKET,
+    CLOSEBRACKET,
 
-    OPENCURLYBRACKET
-    CLOSECURLYBRACKET
+    OPENCURLYBRACKET,
+    CLOSECURLYBRACKET,
 
-    OPENPARENTHESIS
-    CLOSEPARENTHESIS
+    OPENPARENTHESIS,
+    CLOSEPARENTHESIS,
 
     DOT,
     DOTDOT, // ex: for 0..3 loop (0,1,2,3)
@@ -138,6 +138,8 @@ class Token {
                 case TokenType::IN: return "IN";
                 case TokenType::TRUE_TOKEN: return "TRUE";
                 case TokenType::FALSE_TOKEN: return "FALSE";
+                // in case I forget to add a token here, let's put a default case
+                default: return "Woopsies, Unknown Token";
             }
         }
 
@@ -151,10 +153,10 @@ class Token {
 
         static void Debug(const Token& token) {
             if (IsKnown({TokenType::NUMBER, TokenType::STRING, TokenType::IDENTIFIER}, token.type)) {
-                std::cout << token.GetType() << token.value << std::endl;
+                std::cout << GetType(token.type) << ": " << token.value << std::endl;
             }
             else {
-                std::cout << token.GetType() << std::endl;
+                std::cout << GetType(token.type) << std::endl;
             }
         }
 
