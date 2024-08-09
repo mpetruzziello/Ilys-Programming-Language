@@ -55,8 +55,8 @@ enum class TokenType {
     MODULO,
 
     //bool
-    TRUE,
-    FALSE,
+    TRUE_TOKEN,
+    FALSE_TOKEN,
 
     //kw
     IF,
@@ -136,8 +136,8 @@ class Token {
                 case TokenType::FOR: return "FOR";
                 case TokenType::WHILE: return "WHILE";
                 case TokenType::IN: return "IN";
-                case TokenType::TRUE: return "TRUE";
-                case TokenType::FALSE: return "FALSE";
+                case TokenType::TRUE_TOKEN: return "TRUE";
+                case TokenType::FALSE_TOKEN: return "FALSE";
             }
         }
 
