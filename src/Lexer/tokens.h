@@ -1,5 +1,9 @@
+#ifndef TOKENS_H
+#define TOKENS_H
+
 #include <iostream>
 #include <string>
+#include <initializer_list>
 
 enum class TokenType {
     E0F_TOKEN,
@@ -169,3 +173,5 @@ class Token {
             return false;
         }
 };
+
+#endif
