@@ -149,13 +149,12 @@ class Token {
             return token;
         }
 
-        std::string Debug() const {
-            // the value of the identifier, number or string is necessary because it is not always the same. ex: true is always 1 in value 
-            if (type == TokenType::IDENTIFIER || type == TokenType::NUMBER || type == TokenType::STRING) {
-                return GetType() + " : " + value;
+        static void Debug(const Token& token) {
+            if (IsKnown({TokenType::NUMBER, TokenType::STRING, TokenType::IDENTIFIER}, token.type)) {
+                std::cout << token.GetType() << token.value << std::endl;
             }
             else {
-                return GetType();
+                std::cout << token.GetType() << std::endl;
             }
         }
 
