@@ -81,7 +81,7 @@ class Token {
         TokenType type;
         std::string value;
 
-        std::string GetType() const {
+        static std::string GetType(TokenType type) {
             switch (type) {
                 case TokenType::E0F_TOKEN: return "EOF";
                 case TokenType::OPENBRACKET: return "OPEN BRACKET";
