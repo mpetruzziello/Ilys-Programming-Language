@@ -49,7 +49,10 @@ Lexer* ConstructLexer(std::string source) {
     lexer->Source = source;
     lexer->Position = 0;
     lexer->Tokens = std::vector<Token>();
-    lexer->Patterns = 
+    lexer->Patterns = {
+        
+    };
+    return lexer;
 }
 
 // defining a function called Tokenize which takes a source string and returns an array of tokens
