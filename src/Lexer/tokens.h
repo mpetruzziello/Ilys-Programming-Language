@@ -2,8 +2,13 @@
 #define TOKENS_H
 
 #include <iostream>
+#include <iomanip>
+#include <regex>
 #include <string>
 #include <initializer_list>
+#include <vector>
+#include <functional>
+#include <memory>
 
 enum class TokenType {
     E0F_TOKEN,
