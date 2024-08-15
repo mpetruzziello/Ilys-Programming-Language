@@ -35,6 +35,15 @@ class Lexer {
         std::vector<RegexPattern> Patterns;
 };
 
+// defining a helper function called "At" to return the source at the lexer's position in bytes
+std::byte SourceAt(Lexer* lexer) {
+    // error checking (returning null byte if the position is out of index bounds)
+    if (lexer->Position < 0 || lexer->Position >= lexer->Source.length()) {
+        return static_cast<std::byte>(0);
+    }
+    return static_cast<std::byte>(lexer->Source[lexer->Position]);
+}
+
 // defining a function called "LexAdvance" to advance the lexer's position by a given amount (int)
 void LexAdvance(Lexer* lexer, int amount) {
     lexer->Position += amount; // changing the position field of the lexer

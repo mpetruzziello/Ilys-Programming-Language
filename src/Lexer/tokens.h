@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <cstddef>
 
 enum class TokenType {
     E0F_TOKEN,
