@@ -72,7 +72,8 @@ RegexHandler defaultHandler(TokenType type, std::string value) {
     return [type, value](Lexer* lexer, std::regex* regex) {
         // advancing the lexer's position just past the value we matched and pushing a token
         LexAdvance(lexer, value.length());
-        TokenPush(lexer, Token(type, value));
+        // pushing the token created by ConstructToken(TokenType, value)
+        TokenPush(lexer, ConstructToken(type, value));
     }
 }
 
@@ -133,5 +134,8 @@ std::vector<Token> Tokenize(std::string source) {
         }
     }
 
+    // Pushing an EOF token to the lexer's tokens vector
+    // EOF Token: TokenType::E0F_TOKEN, value: "EOF" --> use ConstructToken
+    TokenPush(lexer, ConstructToken(E0F_TOKEN, "EOF"));
     return lexer->Tokens;
 }
