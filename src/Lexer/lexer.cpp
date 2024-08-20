@@ -132,4 +132,6 @@ std::vector<Token> Tokenize(std::string source) {
             // break; (comment out but could be used for future)
         }
     }
+
+    return lexer->Tokens;
 }
