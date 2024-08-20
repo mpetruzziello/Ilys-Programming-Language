@@ -85,7 +85,17 @@ Lexer* ConstructLexer(std::string source) {
     lexer->Position = 0;
     lexer->Tokens = std::vector<Token>();
     lexer->Patterns = {
+        // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(OPENBRACKET, "[")},
+        RegexPattern{std::make_unique<std::regex>("\\]"), defaultHandler(CLOSEBRACKET, "]")},
+
+        // OPENCURLYBRACKET and CLOSECURLYBRACKET
+        RegexPattern{std::make_unique<std::regex>("\\{"), defaultHandler(OPENCURLYBRACKET, "{")},
+        RegexPattern{std::make_unique<std::regex>("\\}"), defaultHandler(CLOSECURLYBRACKET, "}")},
+
+        
+        RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(OPENPARENTHESIS, "(")},
+        RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(CLOSEPARENTHESIS, ")")},
     };
     return lexer;
 }
