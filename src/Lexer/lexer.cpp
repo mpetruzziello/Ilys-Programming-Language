@@ -29,6 +29,17 @@ class Lexer {
             Patterns = std::vector<RegexPattern>();
         }
 
+        // getter for the position field
+        int GetPosition() const {
+            return Position;
+        }
+
+        // getter for the source field
+        const std::string& GetSource() const {
+            return Source;
+        }
+
+
     private:
         std::string Source;
         int Position;
@@ -38,15 +49,15 @@ class Lexer {
 // returns the byte at the current position of the lexer's source string
 std::byte SourceAt(Lexer* lexer) {
     // error checking (returning null byte if the position is out of index bounds)
-    if (lexer->Position < 0 || lexer->Position >= lexer->Source.length()) {
+    if (lexer->GetPosition() < 0 || lexer->GetPosition() >= lexer->GetSource().length()) {
         return static_cast<std::byte>(0);
     }
-    return static_cast<std::byte>(lexer->Source[lexer->Position]);
+    return static_cast<std::byte>(lexer->GetSource()[lexer->GetPosition()]);
 }
 
 // returns the string from the source at position index to the end of the source string
 std::string WhatRemains(Lexer* lexer) {
-    if (lexer->Position < 0 || lexer->Position >= lexer->Source.length()) {
+    if (lexer->GetPosition() < 0 || lexer->Position >= lexer->Source.length()) {
         return "";
     }
     return lexer->Source.substr(lexer->Position);
