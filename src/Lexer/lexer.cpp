@@ -85,7 +85,7 @@ Lexer* ConstructLexer(std::string source) {
     lexer->Position = 0;
     lexer->Tokens = std::vector<Token>();
     lexer->Patterns = {
-        RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(OPEN_BRACKET, "[")},
+        RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(OPENBRACKET, "[")},
     };
     return lexer;
 }
