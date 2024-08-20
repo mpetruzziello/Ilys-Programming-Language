@@ -84,12 +84,52 @@ Lexer* ConstructLexer(std::string source) {
     lexer->Position = 0;
     lexer->Tokens = std::vector<Token>();
     lexer->Patterns = {
-        
+        RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(OPEN_BRACKET, "[")},
     };
     return lexer;
 }
 
 // defining a function called Tokenize which takes a source string and returns an array of tokens
 std::vector<Token> Tokenize(std::string source) {
+    // creating a lexer from the source string
+    Lexer* lexer = ConstructLexer(source);
 
+    // iterating while the lexer's position is not at the end of the source string (EOF)
+    while (!IsEOF(lexer)) {
+        
+        // declaring variable set to false to check if a pattern was matched
+        bool matched = false;
+
+        // iterating through the lexer's patterns
+        for (RegexPattern pattern : lexer->Patterns) {
+            // checking if the lexer's position is at the end of the source string
+            if (IsEOF(lexer)) {
+                break;
+            }
+
+            // getting the regex pattern from the current pattern
+            std::regex* regex = pattern.regex.get();
+
+            // creating a match object to store the results of the regex match
+            std::smatch match;
+
+            // checking if the regex pattern matches the source string at the current position
+            if (std::regex_search(WhatRemains(lexer), match, *regex)) {
+                pattern.handler(lexer, regex);
+                matched = true;
+                break;
+            }
+        }
+
+        // what if no pattern was matched?
+        if (!matched) {
+            // handling the error by throwing an exception
+            // not advancing the position by 1 (to avoid infinite loop and for future error handling fixing)
+            throw std::runtime_error("No pattern matched at position " + std::to_string(lexer->Position));
+
+            // LexAdvance(lexer, 1); (comment out but could be used for future)
+            // TokenPush(lexer, Token(UNKNOWN, WhatRemains(lexer).substr(0, 1))); (comment out but could be used for future)
+            // break; (comment out but could be used for future)
+        }
+    }
 }
