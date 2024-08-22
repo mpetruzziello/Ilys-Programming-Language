@@ -131,6 +131,7 @@ Lexer* ConstructLexer(std::string source) {
     lexer->SetPosition(0);
     lexer->Tokens = std::vector<Token>();
     lexer->SetPatterns({
+
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
         RegexPattern{std::make_unique<std::regex>("\\]"), defaultHandler(TokenType::CLOSEBRACKET, "]")},
@@ -139,9 +140,35 @@ Lexer* ConstructLexer(std::string source) {
         RegexPattern{std::make_unique<std::regex>("\\{"), defaultHandler(TokenType::OPENCURLYBRACKET, "{")},
         RegexPattern{std::make_unique<std::regex>("\\}"), defaultHandler(TokenType::CLOSECURLYBRACKET, "}")},
 
-        
+        // OPENPARENTHESIS AND CLOSEPARENTHESIS
         RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(TokenType::OPENPARENTHESIS, "(")},
         RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(TokenType::CLOSEPARENTHESIS, ")")},
+
+        // DOT AND DOTDOT
+        RegexPattern{std::make_unique<std::regex>("\\."), defaultHandler(TokenType::DOT, ".")},
+        RegexPattern{std::make_unique<std::regex>("\\.."), defaultHandler(TokenType::DOTDOT, "..")},
+
+        // EQUALS AND NOTEQUALS
+        RegexPattern{std::make_unique<std::regex>("=="), defaultHandler(TokenType::EQUALS, "==")},
+        RegexPattern{std::make_unique<std::regex>("!="), defaultHandler(TokenType::NOTEQUALS, "!=")},
+
+        // ASSIGNMENT AND NOT
+        RegexPattern{std::make_unique<std::regex>("="), defaultHandler(TokenType::ASSIGNMENT, "=")},
+        RegexPattern{std::make_unique<std::regex>("!"), defaultHandler(TokenType::NOT, "!")},
+
+        // LESSTHAN AND LESSTHANEQUALS
+        RegexPattern{std::make_unique<std::regex>("<="), defaultHandler(TokenType::LESSTHANEQUALS, "<=")},
+        RegexPattern{std::make_unique<std::regex>("<"), defaultHandler(TokenType::LESSTHAN, "<")},
+
+        // GREATERTHAN AND GREATERTHANEQUALS
+        RegexPattern{std::make_unique<std::regex>(">="), defaultHandler(TokenType::GREATERTHANEQUALS, ">=")},
+        RegexPattern{std::make_unique<std::regex>(">"), defaultHandler(TokenType::GREATERTHAN, ">")},
+
+        // AND AND OR
+        RegexPattern{std::make_unique<std::regex>("&&"), defaultHandler(TokenType::AND, "&&")},
+        RegexPattern{std::make_unique<std::regex>("\\|\\|"), defaultHandler(TokenType::OR, "||")},
+
+        
     });
     return lexer;
 }
