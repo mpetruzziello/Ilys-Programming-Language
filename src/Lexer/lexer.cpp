@@ -123,6 +123,16 @@ RegexHandler defaultHandler(TokenType type, std::string value) {
     };
 }
 
+// defining a function called "numberHandler" which takes a mutable instance of a lexer and a regex pointer and returns nothing
+void numberHandler(Lexer* lexer, std::regex* regex) {
+    std::smatch match;
+    std::string remains = WhatRemains(lexer);
+    if (std::regex_search(remains, match, *regex)) {
+        std::string matchedStr = match.str();
+        TokenPush(lexer, Token::ConstructToken(TokenType::NUMBER, matchedStr));
+        LexAdvance(lexer, matchedStr.length());
+    }
+}
 
 // defining a function that creates a lexer by taking a source string and returning a lexer pointer
 Lexer* ConstructLexer(std::string source) {
@@ -133,7 +143,7 @@ Lexer* ConstructLexer(std::string source) {
     lexer->SetPatterns({
 
         // NUMBER (special handler)
-        RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler(TokenType::NUMBER, "[0-9]+(\\.[0-9]+)?")}
+        RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler},
 
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
