@@ -168,7 +168,32 @@ Lexer* ConstructLexer(std::string source) {
         RegexPattern{std::make_unique<std::regex>("&&"), defaultHandler(TokenType::AND, "&&")},
         RegexPattern{std::make_unique<std::regex>("\\|\\|"), defaultHandler(TokenType::OR, "||")},
 
-        
+        // COLON AND SEMICOLON
+        RegexPattern{std::make_unique<std::regex>(":"), defaultHandler(TokenType::COLON, ":")},
+        RegexPattern{std::make_unique<std::regex>(";"), defaultHandler(TokenType::SEMICOLON, ";")},
+
+        // QUESTIONMARK AND COMMA
+        RegexPattern{std::make_unique<std::regex>("\\?"), defaultHandler(TokenType::QUESTIONMARK, "?")},
+        RegexPattern{std::make_unique<std::regex>(","), defaultHandler(TokenType::COMMA, ",")},
+
+        // PLUSPLUS AND MINUSMINUS (CREATING FIRST TO AVOID CONFLICT WITH PLUS AND MINUS DEFINED FIRST)
+        RegexPattern{std::make_unique<std::regex>("\\+\\+"), defaultHandler(TokenType::PLUSPLUS, "++")},
+        RegexPattern{std::make_unique<std::regex>("--"), defaultHandler(TokenType::MINUSMINUS, "--")},
+
+        // PLUSEQUALS AND MINUSEQUALS
+        RegexPattern{std::make_unique<std::regex>("\\+="), defaultHandler(TokenType::PLUSEQUALS, "+=")},
+        RegexPattern{std::make_unique<std::regex>("-="), defaultHandler(TokenType::MINUSEQUALS, "-=")},
+
+        // PLUS AND MINUS
+        RegexPattern{std::make_unique<std::regex>("\\+"), defaultHandler(TokenType::PLUS, "+")},
+        RegexPattern{std::make_unique<std::regex>("-"), defaultHandler(TokenType::MINUS, "-")},
+
+        // DIVIDE AND MULTIPLY
+        RegexPattern{std::make_unique<std::regex>("/"), defaultHandler(TokenType::DIVIDE, "/")},
+        RegexPattern{std::make_unique<std::regex>("\\*"), defaultHandler(TokenType::MULTIPLY, "*")},
+
+        // MODULO
+        RegexPattern{std::make_unique<std::regex>("%"), defaultHandler(TokenType::MODULO, "%")},
     });
     return lexer;
 }
