@@ -132,6 +132,9 @@ Lexer* ConstructLexer(std::string source) {
     lexer->Tokens = std::vector<Token>();
     lexer->SetPatterns({
 
+        // NUMBER (special handler)
+        RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler(TokenType::NUMBER, "[0-9]+(\\.[0-9]+)?")}
+
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
         RegexPattern{std::make_unique<std::regex>("\\]"), defaultHandler(TokenType::CLOSEBRACKET, "]")},
