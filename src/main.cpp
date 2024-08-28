@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 
+
 int main() {
 
     // Opening the binary file
