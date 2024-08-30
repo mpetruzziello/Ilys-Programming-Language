@@ -10,6 +10,7 @@
 #include <functional>
 #include <memory>
 #include <cstddef>
+#include <fstream>
 
 enum class TokenType {
     E0F_TOKEN,
