@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "Lexer/lexer.h"
 
 
 int main() {
@@ -15,4 +15,12 @@ int main() {
 
     // Converting the bytes to a string representing the source code
     std::string sourceCode(bytes.begin(), bytes.end());
+
+    // Tokenizing the source code
+    std::vector<Token> tokens = Tokenize(sourceCode);
+
+    // Debugging each token in the tokens vector
+    for (Token token : tokens) {
+        token.Debug(token);
+    }
 }
