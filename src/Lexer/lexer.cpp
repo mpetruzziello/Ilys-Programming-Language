@@ -187,7 +187,7 @@ Lexer* ConstructLexer(std::string source) {
     lexer->SetPatterns({
 
         // NUMBER (special handler)
-        RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler},
+        RegexPattern{std::make_unique<std::regex>("-?[0-9]+(\\.[0-9]+)?"), numberHandler},
 
         // Handling whitespaces (special handler --> skipHandler)
         RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), skipHandler},
@@ -206,7 +206,7 @@ Lexer* ConstructLexer(std::string source) {
 
         // DOT AND DOTDOT
         RegexPattern{std::make_unique<std::regex>("\\."), defaultHandler(TokenType::DOT, ".")},
-        RegexPattern{std::make_unique<std::regex>("\\.."), defaultHandler(TokenType::DOTDOT, "..")},
+        RegexPattern{std::make_unique<std::regex>("\\.\\."), defaultHandler(TokenType::DOTDOT, "..")},
 
         // EQUALS AND NOTEQUALS
         RegexPattern{std::make_unique<std::regex>("=="), defaultHandler(TokenType::EQUALS, "==")},
