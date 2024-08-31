@@ -152,6 +152,21 @@ RegexHandler defaultHandler(TokenType type, std::string value) {
     };
 }
 
+// defining a function called "skipHandler" which takes a mutable instance of a lexer and a regex pointer and returns nothing
+void skipHandler(Lexer* lexer, std::regex* regex) {
+    // getting the matched string from the regex
+    std::smatch match;
+    std::string remains = WhatRemains(lexer);
+
+    // checking if the regex matches the source string at the current position
+    if (std::regex_search(remains, match, *regex)) {
+        // advancing the lexer's position by the length of the matched string
+        LexAdvance(lexer, match.str().length());
+    }
+
+    // NOTE: we are not pushing a token here because we are skipping the whitespace
+}
+
 // defining a function called "numberHandler" which takes a mutable instance of a lexer and a regex pointer and returns nothing
 void numberHandler(Lexer* lexer, std::regex* regex) {
     std::smatch match;
@@ -175,9 +190,7 @@ Lexer* ConstructLexer(std::string source) {
         RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler},
 
         // Handling whitespaces (special handler --> skipHandler)
-        RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), [](Lexer* lexer, std::regex* regex) {
-            LexAdvance(lexer, std::string(regex->str()).length());
-        }},
+        RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), skipHandler},
         
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
