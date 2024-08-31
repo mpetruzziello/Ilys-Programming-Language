@@ -22,6 +22,35 @@ class RegexPattern {
             this->handler = handler;
         }
 
+        // Custom copy constructor (deep copy --> cannot copy unique pointers)
+        RegexPattern(const RegexPattern& other) {
+            if (other.regex) {
+                regex = std::make_unique<std::regex>(*other.regex);
+            }
+            else {
+                regex = nullptr;
+            }
+            handler = other.handler;
+        }
+
+        // Custom copy assignment operator (deep copy --> cannot copy unique pointers)
+        RegexPattern& operator=(const RegexPattern& other) {
+            if (this != &other) {
+                if (other.regex) {
+                    regex = std::make_unique<std::regex>(*other.regex);
+                }
+                else {
+                    regex = nullptr;
+                }
+                handler = other.handler;
+            }
+            return *this;
+        }
+
+        // Move constructor and move assignment operator (default implementation)
+        RegexPattern(RegexPattern&&) = default;
+        RegexPattern& operator=(RegexPattern&&) = default;
+
         // getter for the regex field
         const std::unique_ptr<std::regex>& GetRegex() const {
             return regex;
