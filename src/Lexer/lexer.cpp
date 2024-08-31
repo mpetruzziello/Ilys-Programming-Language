@@ -174,6 +174,11 @@ Lexer* ConstructLexer(std::string source) {
         // NUMBER (special handler)
         RegexPattern{std::make_unique<std::regex>("[0-9]+(\\.[0-9]+)?"), numberHandler},
 
+        // Handling whitespaces (special handler --> skipHandler)
+        RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), [](Lexer* lexer, std::regex* regex) {
+            LexAdvance(lexer, std::string(regex->str()).length());
+        }},
+        
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
         RegexPattern{std::make_unique<std::regex>("\\]"), defaultHandler(TokenType::CLOSEBRACKET, "]")},

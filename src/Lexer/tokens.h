@@ -15,6 +15,8 @@
 enum class TokenType {
     E0F_TOKEN,
 
+    WHITESPACE,
+    
     OPENBRACKET,
     CLOSEBRACKET,
 
@@ -149,6 +151,7 @@ class Token {
                 case TokenType::IN: return "IN";
                 case TokenType::TRUE_TOKEN: return "TRUE";
                 case TokenType::FALSE_TOKEN: return "FALSE";
+                case TokenType::WHITESPACE: return "WHITESPACE";
                 // in case I forget to add a token here, let's put a default case
                 default: return "Woopsies, Unknown Token";
             }
