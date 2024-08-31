@@ -185,73 +185,55 @@ Lexer* ConstructLexer(std::string source) {
     lexer->SetPosition(0);
     lexer->Tokens = std::vector<Token>();
     lexer->SetPatterns({
-
         // NUMBER (special handler)
         RegexPattern{std::make_unique<std::regex>("-?[0-9]+(\\.[0-9]+)?"), numberHandler},
-
         // Handling whitespaces (special handler --> skipHandler)
         RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), skipHandler},
-        
         // OPENBRACKET and CLOSEBRACKET
         RegexPattern{std::make_unique<std::regex>("\\["), defaultHandler(TokenType::OPENBRACKET, "[")},
         RegexPattern{std::make_unique<std::regex>("\\]"), defaultHandler(TokenType::CLOSEBRACKET, "]")},
-
         // OPENCURLYBRACKET and CLOSECURLYBRACKET
         RegexPattern{std::make_unique<std::regex>("\\{"), defaultHandler(TokenType::OPENCURLYBRACKET, "{")},
         RegexPattern{std::make_unique<std::regex>("\\}"), defaultHandler(TokenType::CLOSECURLYBRACKET, "}")},
-
         // OPENPARENTHESIS AND CLOSEPARENTHESIS
         RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(TokenType::OPENPARENTHESIS, "(")},
         RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(TokenType::CLOSEPARENTHESIS, ")")},
-
-        // DOT AND DOTDOT
-        RegexPattern{std::make_unique<std::regex>("\\."), defaultHandler(TokenType::DOT, ".")},
-        RegexPattern{std::make_unique<std::regex>("\\.\\."), defaultHandler(TokenType::DOTDOT, "..")},
-
         // EQUALS AND NOTEQUALS
         RegexPattern{std::make_unique<std::regex>("=="), defaultHandler(TokenType::EQUALS, "==")},
         RegexPattern{std::make_unique<std::regex>("!="), defaultHandler(TokenType::NOTEQUALS, "!=")},
-
         // ASSIGNMENT AND NOT
         RegexPattern{std::make_unique<std::regex>("="), defaultHandler(TokenType::ASSIGNMENT, "=")},
         RegexPattern{std::make_unique<std::regex>("!"), defaultHandler(TokenType::NOT, "!")},
-
         // LESSTHAN AND LESSTHANEQUALS
         RegexPattern{std::make_unique<std::regex>("<="), defaultHandler(TokenType::LESSTHANEQUALS, "<=")},
         RegexPattern{std::make_unique<std::regex>("<"), defaultHandler(TokenType::LESSTHAN, "<")},
-
         // GREATERTHAN AND GREATERTHANEQUALS
         RegexPattern{std::make_unique<std::regex>(">="), defaultHandler(TokenType::GREATERTHANEQUALS, ">=")},
         RegexPattern{std::make_unique<std::regex>(">"), defaultHandler(TokenType::GREATERTHAN, ">")},
-
         // AND AND OR
         RegexPattern{std::make_unique<std::regex>("&&"), defaultHandler(TokenType::AND, "&&")},
         RegexPattern{std::make_unique<std::regex>("\\|\\|"), defaultHandler(TokenType::OR, "||")},
-
+        // DOT AND DOTDOT
+        RegexPattern{std::make_unique<std::regex>("\\."), defaultHandler(TokenType::DOT, ".")},
+        RegexPattern{std::make_unique<std::regex>("\\.\\."), defaultHandler(TokenType::DOTDOT, "..")},
         // COLON AND SEMICOLON
         RegexPattern{std::make_unique<std::regex>(":"), defaultHandler(TokenType::COLON, ":")},
         RegexPattern{std::make_unique<std::regex>(";"), defaultHandler(TokenType::SEMICOLON, ";")},
-
         // QUESTIONMARK AND COMMA
         RegexPattern{std::make_unique<std::regex>("\\?"), defaultHandler(TokenType::QUESTIONMARK, "?")},
         RegexPattern{std::make_unique<std::regex>(","), defaultHandler(TokenType::COMMA, ",")},
-
         // PLUSPLUS AND MINUSMINUS (CREATING FIRST TO AVOID CONFLICT WITH PLUS AND MINUS DEFINED FIRST)
         RegexPattern{std::make_unique<std::regex>("\\+\\+"), defaultHandler(TokenType::PLUSPLUS, "++")},
         RegexPattern{std::make_unique<std::regex>("--"), defaultHandler(TokenType::MINUSMINUS, "--")},
-
         // PLUSEQUALS AND MINUSEQUALS
         RegexPattern{std::make_unique<std::regex>("\\+="), defaultHandler(TokenType::PLUSEQUALS, "+=")},
         RegexPattern{std::make_unique<std::regex>("-="), defaultHandler(TokenType::MINUSEQUALS, "-=")},
-
         // PLUS AND MINUS
         RegexPattern{std::make_unique<std::regex>("\\+"), defaultHandler(TokenType::PLUS, "+")},
         RegexPattern{std::make_unique<std::regex>("-"), defaultHandler(TokenType::MINUS, "-")},
-
         // DIVIDE AND MULTIPLY
         RegexPattern{std::make_unique<std::regex>("/"), defaultHandler(TokenType::DIVIDE, "/")},
         RegexPattern{std::make_unique<std::regex>("\\*"), defaultHandler(TokenType::MULTIPLY, "*")},
-
         // MODULO
         RegexPattern{std::make_unique<std::regex>("%"), defaultHandler(TokenType::MODULO, "%")},
     });
