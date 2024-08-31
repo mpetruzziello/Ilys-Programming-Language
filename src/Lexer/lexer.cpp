@@ -171,10 +171,16 @@ void skipHandler(Lexer* lexer, std::regex* regex) {
 void numberHandler(Lexer* lexer, std::regex* regex) {
     std::smatch match;
     std::string remains = WhatRemains(lexer);
-    if (std::regex_search(remains, match, *regex)) {
+    std::cout << "Remaining string: " << remains << std::endl; // Debugging output
+
+    if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
         std::string matchedStr = match.str();
+        std::cout << "Matched number: " << matchedStr << std::endl; // Debugging output
         TokenPush(lexer, Token::ConstructToken(TokenType::NUMBER, matchedStr));
         LexAdvance(lexer, matchedStr.length());
+    } else {
+        std::cout << "No match found, advancing by 1 character" << std::endl; // Debugging output
+        LexAdvance(lexer, 1); // Ensure the lexer always advances to avoid infinite loop
     }
 }
 
