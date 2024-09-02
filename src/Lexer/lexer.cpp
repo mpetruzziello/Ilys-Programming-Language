@@ -269,7 +269,7 @@ std::vector<Token> Tokenize(std::string source) {
 
             // checking if the regex pattern matches the source string at the current position
             std::string remains = WhatRemains(lexer);
-            if (std::regex_match(remains, match, *regex)) {
+            if (std::regex_search(remains, match, *regex)) {
                 pattern.GetHandler()(lexer, regex);
                 matched = true;
                 break;
