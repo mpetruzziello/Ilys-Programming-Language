@@ -149,11 +149,7 @@ RegexHandler defaultHandler(TokenType type, std::string value) {
         std::string remains = WhatRemains(lexer);
 
         if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
-            LexAdvance(lexer, match.str().length());
             TokenPush(lexer, Token::ConstructToken(type, value));
-        }
-        else {
-            LexAdvance(lexer, 1); // Ensure the lexer always advances to avoid infinite loop
         }
     };
 }
@@ -166,8 +162,8 @@ void skipHandler(Lexer* lexer, std::regex* regex) {
 
     // checking if the regex matches the source string at the current position
     if (std::regex_search(remains, match, *regex)) {
-        // advancing the lexer's position by the length of the matched string
-        LexAdvance(lexer, match.str().length());
+        // not advancing since it is handled in Tokenize
+        
     }
 
     // NOTE: we are not pushing a token here because we are skipping the whitespace
@@ -189,11 +185,7 @@ void numberHandler(Lexer* lexer, std::regex* regex) {
             return !std::isspace(ch);
         }).base(), matchedStr.end());
 
-        // Pushing and advancing the lexer's position
         TokenPush(lexer, Token::ConstructToken(TokenType::NUMBER, matchedStr));
-        LexAdvance(lexer, matchedStr.length());
-    } else {
-        LexAdvance(lexer, 1); // Ensure the lexer always advances to avoid infinite loop
     }
 }
 
@@ -278,6 +270,7 @@ std::vector<Token> Tokenize(std::string source) {
             if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
                 if (match.position() == 0) {
                     pattern.GetHandler()(lexer, regex);
+                    LexAdvance(lexer, match.length());
                     matched = true;
                     break;
                 }
