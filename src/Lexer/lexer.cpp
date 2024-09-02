@@ -145,10 +145,16 @@ void TokenPush(Lexer* lexer, Token token) {
 // defining a function called "defaultHandler" which takes a type TokenType and a string value and returns a RegexHandler
 RegexHandler defaultHandler(TokenType type, std::string value) {
     return [type, value](Lexer* lexer, std::regex* regex) {
-        // advancing the lexer's position just past the value we matched and pushing a token
-        LexAdvance(lexer, value.length());
-        // pushing the token created by ConstructToken(TokenType, value)
-        TokenPush(lexer, Token::ConstructToken(type, value));
+        std::smatch match;
+        std::string remains = WhatRemains(lexer);
+
+        if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
+            LexAdvance(lexer, match.str().length());
+            TokenPush(lexer, Token::ConstructToken(type, value));
+        }
+        else {
+            LexAdvance(lexer, 1); // Ensure the lexer always advances to avoid infinite loop
+        }
     };
 }
 
@@ -188,6 +194,9 @@ Lexer* ConstructLexer(std::string source) {
     lexer->SetPosition(0);
     lexer->Tokens = std::vector<Token>();
     lexer->SetPatterns({
+        // OPENPARENTHESIS AND CLOSEPARENTHESIS
+        RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(TokenType::OPENPARENTHESIS, "(")},
+        RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(TokenType::CLOSEPARENTHESIS, ")")},
         // NUMBER (special handler)
         RegexPattern{std::make_unique<std::regex>("-?[0-9]+(\\.[0-9]+)?"), numberHandler},
         // Handling whitespaces (special handler --> skipHandler)
@@ -198,9 +207,6 @@ Lexer* ConstructLexer(std::string source) {
         // OPENCURLYBRACKET and CLOSECURLYBRACKET
         RegexPattern{std::make_unique<std::regex>("\\{"), defaultHandler(TokenType::OPENCURLYBRACKET, "{")},
         RegexPattern{std::make_unique<std::regex>("\\}"), defaultHandler(TokenType::CLOSECURLYBRACKET, "}")},
-        // OPENPARENTHESIS AND CLOSEPARENTHESIS
-        RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(TokenType::OPENPARENTHESIS, "(")},
-        RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(TokenType::CLOSEPARENTHESIS, ")")},
         // EQUALS AND NOTEQUALS
         RegexPattern{std::make_unique<std::regex>("=="), defaultHandler(TokenType::EQUALS, "==")},
         RegexPattern{std::make_unique<std::regex>("!="), defaultHandler(TokenType::NOTEQUALS, "!=")},
@@ -245,51 +251,36 @@ Lexer* ConstructLexer(std::string source) {
 
 // defining a function called Tokenize which takes a source string and returns an array of tokens
 std::vector<Token> Tokenize(std::string source) {
-    // creating a lexer from the source string
     Lexer* lexer = ConstructLexer(source);
 
-    // iterating while the lexer's position is not at the end of the source string (EOF)
     while (!IsEOF(lexer)) {
-        
-        // declaring variable set to false to check if a pattern was matched
         bool matched = false;
 
-        // iterating through the lexer's patterns
         for (const RegexPattern& pattern : lexer->GetPatterns()) {
-            // checking if the lexer's position is at the end of the source string
             if (IsEOF(lexer)) {
                 break;
             }
 
-            // getting the regex pattern from the current pattern
             std::regex* regex = pattern.GetRegex().get();
-
-            // creating a match object to store the results of the regex match
             std::smatch match;
-
-            // checking if the regex pattern matches the source string at the current position
             std::string remains = WhatRemains(lexer);
-            if (std::regex_search(remains, match, *regex)) {
-                pattern.GetHandler()(lexer, regex);
-                matched = true;
-                break;
+
+            if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
+                if (match.position() == 0) {
+                    pattern.GetHandler()(lexer, regex);
+                    lexer->SetPosition(lexer->GetPosition() + match.length());
+                    matched = true;
+                    break;
+                }
             }
         }
 
-        // what if no pattern was matched?
         if (!matched) {
-            // handling the error by throwing an exception
-            // not advancing the position by 1 (to avoid infinite loop and for future error handling fixing)
-            throw std::runtime_error("No pattern matched at position " + std::to_string(lexer->GetPosition()));
-
-            // LexAdvance(lexer, 1); (comment out but could be used for future)
-            // TokenPush(lexer, Token(UNKNOWN, WhatRemains(lexer).substr(0, 1))); (comment out but could be used for future)
-            // break; (comment out but could be used for future)
+            // Handle the case where no pattern was matched
+            std::cerr << "Unexpected character at position " << lexer->GetPosition() << ": " << source[lexer->GetPosition()] << std::endl;
+            lexer->SetPosition(lexer->GetPosition() + 1); // Skip the unexpected character
         }
     }
-
-    // Pushing an EOF token to the lexer's tokens vector
-    // EOF Token: TokenType::E0F_TOKEN, value: "EOF" --> use ConstructToken
     TokenPush(lexer, Token::ConstructToken(TokenType::E0F_TOKEN, "EOF"));
     return lexer->Tokens;
 }
