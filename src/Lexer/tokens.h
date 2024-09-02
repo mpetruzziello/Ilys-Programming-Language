@@ -11,6 +11,8 @@
 #include <memory>
 #include <cstddef>
 #include <fstream>
+#include <algorithm>
+#include <cctype>
 
 enum class TokenType {
     E0F_TOKEN,

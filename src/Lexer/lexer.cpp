@@ -198,7 +198,7 @@ Lexer* ConstructLexer(std::string source) {
         RegexPattern{std::make_unique<std::regex>("\\("), defaultHandler(TokenType::OPENPARENTHESIS, "(")},
         RegexPattern{std::make_unique<std::regex>("\\)"), defaultHandler(TokenType::CLOSEPARENTHESIS, ")")},
         // NUMBER (special handler)
-        RegexPattern{std::make_unique<std::regex>("-?[0-9]+(\\.[0-9]+)?"), numberHandler},
+        RegexPattern{std::make_unique<std::regex>("-?\\s*[0-9]+(\\.[0-9]+)?"), numberHandler},
         // Handling whitespaces (special handler --> skipHandler)
         RegexPattern{std::make_unique<std::regex>("[ \t\n\r]+"), skipHandler},
         // OPENBRACKET and CLOSEBRACKET
@@ -268,7 +268,6 @@ std::vector<Token> Tokenize(std::string source) {
             if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
                 if (match.position() == 0) {
                     pattern.GetHandler()(lexer, regex);
-                    lexer->SetPosition(lexer->GetPosition() + match.length());
                     matched = true;
                     break;
                 }
