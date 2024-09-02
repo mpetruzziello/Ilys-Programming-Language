@@ -180,6 +180,16 @@ void numberHandler(Lexer* lexer, std::regex* regex) {
 
     if (std::regex_search(remains, match, *regex, std::regex_constants::match_continuous)) {
         std::string matchedStr = match.str();
+
+        // Trim leading and trailing whitespaces
+        matchedStr.erase(matchedStr.begin(), std::find_if(matchedStr.begin(), matchedStr.end(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }));
+        matchedStr.erase(std::find_if(matchedStr.rbegin(), matchedStr.rend(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }).base(), matchedStr.end());
+
+        // Pushing and advancing the lexer's position
         TokenPush(lexer, Token::ConstructToken(TokenType::NUMBER, matchedStr));
         LexAdvance(lexer, matchedStr.length());
     } else {
