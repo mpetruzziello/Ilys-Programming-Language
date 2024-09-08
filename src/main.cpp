@@ -66,7 +66,9 @@ int compileTestcase3() {
 
 int main() {
     compileTestcase1();
+    std::cout << std::endl;
     compileTestcase2();
+    std::cout << std::endl;
     compileTestcase3();
     return 0;
 }
