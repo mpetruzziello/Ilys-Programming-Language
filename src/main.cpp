@@ -22,6 +22,8 @@ int compileTestcase1() {
     for (Token token : tokens) {
         token.Debug(token);
     }
+
+    return 0;
 }
 
 
