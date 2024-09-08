@@ -1,5 +1,13 @@
 #include "Lexer/lexer.h"
 
+// holding expected tokens
+struct ExpectedToken {
+    std::string type;
+    std::string value;
+};
+
+// 
+
 // Creating a function to read testcase1.ilys and compile it
 int compileTestcase1() {
     // Opening the binary file

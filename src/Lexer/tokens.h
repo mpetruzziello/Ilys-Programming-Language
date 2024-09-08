@@ -13,6 +13,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cctype>
+#include <iterator>
 
 enum class TokenType {
     E0F_TOKEN,

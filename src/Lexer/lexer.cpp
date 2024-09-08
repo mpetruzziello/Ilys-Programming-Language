@@ -189,6 +189,26 @@ void numberHandler(Lexer* lexer, std::regex* regex) {
     }
 }
 
+// defining a function called "dotHandler"
+void dotHandler(Lexer* lexer, std::regex* regex) {
+    std::smatch match;
+    std::string remains = WhatRemains(lexer);
+
+    // Check for DOTDOT first
+    std::regex dotdotRegex("\\.\\.");
+    if (std::regex_search(remains, match, dotdotRegex, std::regex_constants::match_continuous)) {
+        TokenPush(lexer, Token::ConstructToken(TokenType::DOTDOT, ".."));
+        // no need to advance since it is handled in Tokenize
+        return;
+    }
+
+    // Check for DOT second
+    std::regex dotRegex("\\.");
+    if (std::regex_search(remains, match, dotRegex, std::regex_constants::match_continuous)) {
+        TokenPush(lexer, Token::ConstructToken(TokenType::DOT, "."));
+    }
+}
+
 // defining a function that creates a lexer by taking a source string and returning a lexer pointer
 Lexer* ConstructLexer(std::string source) {
     Lexer* lexer = new Lexer();
@@ -224,9 +244,9 @@ Lexer* ConstructLexer(std::string source) {
         // AND AND OR
         RegexPattern{std::make_unique<std::regex>("&&"), defaultHandler(TokenType::AND, "&&")},
         RegexPattern{std::make_unique<std::regex>("\\|\\|"), defaultHandler(TokenType::OR, "||")},
-        // DOT AND DOTDOT
-        RegexPattern{std::make_unique<std::regex>("\\."), defaultHandler(TokenType::DOT, ".")},
-        RegexPattern{std::make_unique<std::regex>("\\.\\."), defaultHandler(TokenType::DOTDOT, "..")},
+        // DOT AND DOTDOT (special handler)
+        RegexPattern{std::make_unique<std::regex>("\\."), dotHandler},
+        RegexPattern{std::make_unique<std::regex>("\\.\\."), dotHandler},
         // COLON AND SEMICOLON
         RegexPattern{std::make_unique<std::regex>(":"), defaultHandler(TokenType::COLON, ":")},
         RegexPattern{std::make_unique<std::regex>(";"), defaultHandler(TokenType::SEMICOLON, ";")},
