@@ -1,13 +1,12 @@
 #include "Lexer/lexer.h"
 
-
-int main() {
-
+// Creating a function to read testcase1.ilys and compile it
+int compileTestcase1() {
     // Opening the binary file
-    std::ifstream file("../Test_Cases/cases.ilys", std::ios::binary);
+    std::ifstream file("../Test_Cases/testcase1.ilys", std::ios::binary);
     
     if (!file.is_open()) {
-        std::cerr << "Error: cases.ilys file" << std::endl;
+        std::cerr << "Error: testcase1.ilys file" << std::endl;
         return 1;
     }
 
@@ -23,4 +22,10 @@ int main() {
     for (Token token : tokens) {
         token.Debug(token);
     }
+}
+
+
+int main() {
+    compileTestcase1();
+    return 0;
 }
