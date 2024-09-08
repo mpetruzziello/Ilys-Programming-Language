@@ -6,7 +6,18 @@ struct ExpectedToken {
     std::string value;
 };
 
-// 
+// function to compare generated tokens with expected tokens
+bool compareTokens(const std::vector<Token>& generatedTokens, const std::vector<ExpectedToken>& expectedTokens) {
+    if (generatedTokens.size() != expectedTokens.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < generatedTokens.size(); i++) {
+        if (generatedTokens[i].type != expectedTokens[i].type || generatedTokens[i].value != expectedTokens[i].value) {
+            return false;
+        }
+    }
+    return true;
+}
 
 // Creating a function to read testcase1.ilys and compile it
 int compileTestcase1() {
